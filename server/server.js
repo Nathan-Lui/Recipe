@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var {ObjectID} = require('mongodb');
+var _ = require('lodash');
 
 var {mongoose} = require('./db/mongoose');
 var {User} = require('./models/user');
@@ -64,6 +65,27 @@ app.delete('/recipes/:id', (req, res) => {
         }
 
         Recipe.findByIdAndRemove(id).then((recipe) => {
+            if (!recipe){
+                return res.status(404).send();
+            }
+            res.send({recipe});
+        }).catch((e) => {
+            res.status(400).send();
+        })
+    });
+});
+
+// PATCH /recipes/id
+app.patch('/recipes/:id', (req, res) => {
+    Recipe.find().then((recipes) => {
+        var id = req.params.id;
+        var new_name = req.body.recipe_name;
+
+        if(!ObjectID.isValid(id)) {
+            return res.status(404).send();
+        }
+
+        Recipe.findByIdAndUpdate(id, {recipe_name: new_name}).then((recipe) => {
             if (!recipe){
                 return res.status(404).send();
             }
