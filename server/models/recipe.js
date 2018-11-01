@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
-var User = mongoose.model('User', {
-    username: {
+var Recipe = mongoose.model('Recipe', {
+    recipe_name: {
         type: String,
         required: true,
         trim: true,
@@ -9,4 +9,4 @@ var User = mongoose.model('User', {
     }
 });
 
-module.exports = {User}
+module.exports = {Recipe}
